@@ -1,0 +1,19 @@
+<h1>Test</h1>
+<button (click)="create()">Create</button>
+<div *ngIf="transactionService.transactions.length; else noData" >
+  <div  *ngFor="let element of transactionService.transactions">
+    <div>
+      <h3>{{element.id}}</h3>
+      <p><strong>Amount:</strong> {{element.amount}}</p>
+      <p><strong>Date:</strong> {{element.date | date:'yyyy'}}</p>
+      <p><strong>Category:</strong> {{element.category}}</p>
+      <p><strong>Note:</strong>{{element.note}}</p>
+    </div>
+  </div>
+</div>
+
+<ng-template #noData>
+  <div role="alert">
+    <b><p>There are no data in the system, yet!</p></b>
+  </div>
+</ng-template>

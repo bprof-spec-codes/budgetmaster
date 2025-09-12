@@ -23,7 +23,20 @@ internal class Program
             options.UseLazyLoadingProxies();
         });
 
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAngularApp", policy =>
+            {
+                policy.WithOrigins("http://localhost:4200")
+                      .AllowAnyMethod()
+
+                      .AllowAnyHeader();
+            });
+        });
+
         var app = builder.Build();
+
+        app.UseCors("AllowAngularApp");
 
         if (app.Environment.IsDevelopment())
         {

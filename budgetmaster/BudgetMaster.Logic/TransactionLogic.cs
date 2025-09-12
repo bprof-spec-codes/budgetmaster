@@ -26,7 +26,7 @@ namespace BudgetMaster.Logic
             var old = _repo.FindById(id);
             foreach (var prop in typeof(Transaction).GetProperties())
             {
-                if (prop.CanWrite && prop.Name != "Id") // ID-t ne írjuk felül
+                if (prop.CanWrite && prop.Name != "Id")
                 {
                     prop.SetValue(old, prop.GetValue(transaction));
                 }

@@ -1,0 +1,8 @@
+<h2>Create transaction</h2>
+<input type="number"  placeholder="Id" [(ngModel)]="transaction.id" disabled>
+<input type="number"  placeholder="Amount" [(ngModel)]="transaction.amount">
+<input type="text"  placeholder="Category" [(ngModel)]="transaction.category">
+<input type="date"  placeholder="Date" [(ngModel)]="transaction.date">
+<input type="text"  placeholder="Note" [(ngModel)]="transaction.note">
+<input type="bool"placeholder="Earning" [(ngModel)]="transaction.earning" disabled>
+<button class="btn btn-success" (click)="clickSave()">save</button>
