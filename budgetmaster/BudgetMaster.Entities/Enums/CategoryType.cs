@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BudgetMaster.Entities.Enums
 {
-    public enum Category
+    public enum CategoryType
     {
         Food = 1,
         Entertainment = 2,
