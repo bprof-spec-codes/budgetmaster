@@ -1,41 +1,34 @@
 ﻿using BudgetMaster.Entities.Common;
-using BudgetMaster.Entities.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace BudgetMaster.Entities.Models
 {
-    public class Transaction : EntityBase
+    public class Budget : EntityBase
     {
-
         [Required]
         public string UserId { get; set; }
 
-        public int OrganizationId { get; set; }
+        public int? OrganizationId { get; set; }
 
         [Required]
         public int CategoryId { get; set; }
 
         [Required]
-        public TransactionType TransactionType { get; set; }
-
-        [Required]
-        public decimal Amount { get; set; }
+        public decimal AmountLimit { get; set; }
 
         [MaxLength(3)]
         public string Currency { get; set; } = "HUF";
 
         [Required]
-        public DateTime TransactionDate { get; set; }
+        public int Year { get; set; }
 
-        [MaxLength(255)]
-        public string Description { get; set; }
+        public int? Month { get; set; }
 
-        public string Notes { get; set; }
+        public int? Quarter { get; set; }
 
-        public ExpenseType? ExpenseType { get; set; }
+        public bool AlertEnabled { get; set; } = true;
 
-        [MaxLength(500)]
-        public string ReceiptUrl { get; set; }
+        public int AlertThresholdPercent { get; set; } = 80;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
@@ -46,7 +39,5 @@ namespace BudgetMaster.Entities.Models
         public virtual Organization Organization { get; set; }
 
         public virtual Category Category { get; set; }
-
-        public virtual ICollection<ExpenseAllocation> ExpenseAllocations { get; set; }
     }
 }
