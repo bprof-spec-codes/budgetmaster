@@ -1,6 +1,10 @@
-﻿using BudgetMaster.Endpoint.Controllers.Common;
+﻿using BudgetMaster.Data;
+using BudgetMaster.Endpoint.Controllers.Common;
+using BudgetMaster.Entities.DTOs.Transaction;
+using BudgetMaster.Entities.Models;
 using BudgetMaster.Logic;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BudgetMaster.Endpoint.Controllers
 {
@@ -13,31 +17,49 @@ namespace BudgetMaster.Endpoint.Controllers
             this._logic = logic;
         }
 
-        [HttpPost]
-        public void AddTransaction(Entities.Models.Transaction transaction) 
-        {
-            _logic.AddTransaction(transaction);
-        }
         [HttpGet]
-        public IQueryable<Entities.Models.Transaction> GetAllTransactions() 
+        public async Task<IActionResult> GetAll([FromQuery] TransactionFilterDto filter)
         {
-            return _logic.GetAllTransactions();
-        }
-        [HttpGet("{id}")]
-        public Entities.Models.Transaction GetTransactionById(int id) 
-        {
-            return _logic.GetTransactionById(id);
-        }
-        [HttpDelete("{id}")]
-        public void DeleteTransaction(int id) 
-        {
-            _logic.DeleteTransaction(id);
-        }
-        [HttpPut("{id}")]
-        public void UpdateTransaction(int id, Entities.Models.Transaction transaction) 
-        {
-            _logic.UpdateTransaction(id, transaction);
+
+            //logic.method();
+            return Ok();
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(long id)
+        {
+            //logic.method();
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateTransactionDto dto)
+        {
+            //logic.method();
+            return Ok();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(long id, [FromBody] UpdateTransactionDto dto)
+        {
+            //logic.method();
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(long id)
+        {
+            //logic.method();
+            return Ok();
+        }
+
+        [HttpGet("export")]
+        public async Task<IActionResult> Export([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
+        {
+            //To-Do sprint 2
+            //logic.method();
+            return Ok();
+
+        }
     }
 }
