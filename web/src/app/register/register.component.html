@@ -1,0 +1,77 @@
+<div class="container mt-2">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow">
+        <div class="card-body">
+          <h4 class="text-center mb-4">Regisztráció</h4>
+          <form>   <!-- TODO: iconok berakása  -->
+            <div class="mb-3">
+              <label class="form-label" for="username">Felhasználónév</label>
+              <input
+                class="form-control"
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Minimum 3 karakter"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="email">Email cím</label>
+              <input
+                class="form-control"
+                type="email"
+                id="email"
+                name="email"
+                placeholder="pelda@email.com"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="password">Jelszó</label>
+              <input
+                class="form-control"
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Minimum 6 karakter"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="confirmPassword"
+                >Jelszó megerősítése</label
+              >
+              <input
+                class="form-control"
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                placeholder="Jelszó ismétlése"
+                required
+              />
+            </div>
+            <div class="form-check mb-3">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                name="terms"
+                id="termsCheck"
+              />
+              <label class="form-check-label" for="termsCheck">
+                Elfogadom az Általános Szerződési Feltételeket
+              </label>
+            </div>
+            <button class="btn btn-primary w-100 mb-3" type="submit">
+              Regisztráció
+            </button>
+            <p class="text-center">
+              Már van fiókja?
+              <a routerLink="/login">Bejelentkezés</a>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
