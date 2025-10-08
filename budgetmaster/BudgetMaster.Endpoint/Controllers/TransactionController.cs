@@ -26,7 +26,7 @@ namespace BudgetMaster.Endpoint.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(long id)
+        public async Task<IActionResult> GetById(int id)
         {
             //logic.method();
             return Ok();
@@ -40,7 +40,7 @@ namespace BudgetMaster.Endpoint.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(long id, [FromBody] UpdateTransactionDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateTransactionDto dto)
         {
             //logic.method();
             return Ok();
