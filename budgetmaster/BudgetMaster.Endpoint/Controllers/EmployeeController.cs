@@ -1,9 +1,6 @@
-﻿using BudgetMaster.Data;
-using BudgetMaster.Endpoint.Controllers.Common;
+﻿using BudgetMaster.Endpoint.Controllers.Common;
 using BudgetMaster.Entities.DTOs.Employee;
-using BudgetMaster.Entities.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace BudgetMaster.Endpoint.Controllers
 {

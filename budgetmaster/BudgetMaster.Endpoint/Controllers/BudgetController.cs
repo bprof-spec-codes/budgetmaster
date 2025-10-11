@@ -1,10 +1,6 @@
 ﻿using BudgetMaster.Endpoint.Controllers.Common;
-using BudgetMaster.Entities.Enums;
-using BudgetMaster.Entities.Models;
-using Microsoft.AspNetCore.Components;
+using BudgetMaster.Entities.DTOs.Budget;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace BudgetMaster.Endpoint.Controllers
 {
