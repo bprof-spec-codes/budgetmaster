@@ -43,9 +43,6 @@ namespace BudgetMaster.Entities.Models
 
         public bool IsActive { get; set; } = true;
 
-        [MaxLength(7)]
-        public string AvatarColor { get; set; } = "#3B82F6";
-
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
