@@ -41,8 +41,23 @@ namespace BudgetMaster.Endpoint.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            //_logic.method();
-            return Ok();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _logic.LoginAsync(dto);
+
+            if (!result.Success)
+            {
+                return BadRequest(new { message = result.Message });
+            }
+
+            return Ok(new
+            {
+                message = result.Message,
+                token = result.Token
+            });
         }
 
         [HttpPost("logout")]
