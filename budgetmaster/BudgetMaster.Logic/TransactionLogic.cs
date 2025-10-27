@@ -1,45 +1,138 @@
 ﻿using BudgetMaster.Data;
+using BudgetMaster.Entities.DTOs.Transaction;
 using BudgetMaster.Entities.Models;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace BudgetMaster.Logic
 {
     public class TransactionLogic
     {
-        Repository<Transaction> _repo;
+        private readonly BudgetMasterDBContext _context;
 
-        public TransactionLogic(Repository<Transaction> repo)
+        public TransactionLogic(BudgetMasterDBContext context)
         {
-            this._repo = repo;
+            _context = context;
         }
 
-        public void AddTransaction(Transaction transaction) 
+        public async Task<Transaction?> CreateTransactionAsync(CreateTransactionDto dto, string userId)
         {
-            _repo.Create(transaction);
-        }
-        public void DeleteTransaction(int id) 
-        {
-            _repo.DeleteById(id);
-        }
-        public void UpdateTransaction(int id,Transaction transaction) 
-        {
-            var old = _repo.FindById(id);
-            foreach (var prop in typeof(Transaction).GetProperties())
+            var transaction = new Transaction
             {
-                if (prop.CanWrite && prop.Name != "Id")
+                UserId = userId,
+                OrganizationId = 0,
+                CategoryId = null,
+                TransactionType = dto.TransactionType,
+                Amount = dto.Amount,
+                Currency = "HUF",
+                TransactionDate = DateTime.UtcNow,
+                Description = dto.Description ?? string.Empty,
+                Notes = string.Empty,
+                ExpenseType = null
+            };
+
+            _context.Transactions.Add(transaction);
+            await _context.SaveChangesAsync();
+
+            return await _context.Transactions
+                .Include(t => t.User)
+                .Include(t => t.Organization)
+                .Include(t => t.Category)
+                .FirstOrDefaultAsync(t => t.Id == transaction.Id);
+        }
+
+        public async Task<Transaction?> GetTransactionByIdAsync(int id, string userId)
+        {
+            return await _context.Transactions
+                .Include(t => t.User)
+                .Include(t => t.Organization)
+                .Include(t => t.Category)
+                .Include(t => t.ExpenseAllocations)
+                .FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
+        }
+
+        public async Task<List<Transaction>> GetUserTransactionsAsync(string userId, TransactionFilterDto? filter = null)
+        {
+            var query = _context.Transactions
+                .Include(t => t.User)
+                .Include(t => t.Organization)
+                .Include(t => t.Category)
+                .Where(t => t.UserId == userId);
+
+            if (filter != null)
+            {
+                if (filter.StartDate.HasValue)
                 {
-                    prop.SetValue(old, prop.GetValue(transaction));
+                    query = query.Where(t => t.TransactionDate >= filter.StartDate.Value);
+                }
+
+                if (filter.EndDate.HasValue)
+                {
+                    query = query.Where(t => t.TransactionDate <= filter.EndDate.Value);
+                }
+
+                if (filter.CategoryId.HasValue)
+                {
+                    query = query.Where(t => t.CategoryId == filter.CategoryId.Value);
+                }
+
+                if (filter.TransactionType.HasValue)
+                {
+                    query = query.Where(t => t.TransactionType == filter.TransactionType.Value);
+                }
+
+                if (filter.ExpenseType.HasValue)
+                {
+                    query = query.Where(t => t.ExpenseType == filter.ExpenseType.Value);
+                }
+
+                if (filter.Limit.HasValue && filter.Limit.Value > 0)
+                {
+                    query = query.Take(filter.Limit.Value);
                 }
             }
-            _repo.Update(old);
+
+            return await query.OrderByDescending(t => t.TransactionDate).ToListAsync();
         }
-        public Transaction GetTransactionById(int id) 
+
+        public async Task<Transaction?> UpdateTransactionAsync(int id, UpdateTransactionDto dto, string userId)
         {
-            return _repo.FindById(id);
+            var transaction = await _context.Transactions
+                .FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
+
+            if (transaction == null)
+            {
+                return null;
+            }
+
+            transaction.CategoryId = dto.CategoryId;
+            transaction.Amount = dto.Amount;
+            transaction.TransactionDate = dto.TransactionDate;
+
+            if (dto.Description != null)
+                transaction.Description = dto.Description;
+
+            transaction.UpdatedAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+
+            return await GetTransactionByIdAsync(id, userId);
         }
-        public IQueryable<Transaction> GetAllTransactions() 
+
+        public async Task<bool> DeleteTransactionAsync(int id, string userId)
         {
-            return _repo.GetAll();
+            var transaction = await _context.Transactions
+                .FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
+
+            if (transaction == null)
+            {
+                return false;
+            }
+
+            _context.Transactions.Remove(transaction);
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
     }
