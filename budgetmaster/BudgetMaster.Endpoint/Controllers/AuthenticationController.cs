@@ -84,8 +84,31 @@ namespace BudgetMaster.Endpoint.Controllers
         [Authorize]
         public async Task<IActionResult> GetProfile()
         {
-            //_logic.method();
-            return Ok();
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized(new { message = "Invalid token" });
+            }
+
+            var user = await _logic.GetUserByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            return Ok(new
+            {
+                id = user.Id,
+                email = user.Email,
+                firstName = user.FirstName,
+                lastName = user.LastName,
+                phoneNumber = user.PhoneNumber,
+                userType = user.UserType.ToString(),
+                currency = user.Currency,
+                organizationId = user.OrganizationId,
+                createdAt = user.CreatedAt,
+                lastLogin = user.LastLogin
+            });
         }
 
         [HttpPut("profile")]
