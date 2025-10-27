@@ -149,5 +149,26 @@ namespace BudgetMaster.Logic
                 return (false, $"An error occurred: {ex.Message}", null);
             }
         }
+
+        public async Task<bool> LogoutAsync(string userId)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user != null)
+                {
+                    // Update security stamp to invalidate existing tokens (optional)
+                    // await _userManager.UpdateSecurityStampAsync(user);
+
+                    // You can add a LastLogout field to track logout times
+                    return true;
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
