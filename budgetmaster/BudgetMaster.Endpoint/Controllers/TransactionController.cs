@@ -3,12 +3,14 @@ using BudgetMaster.Endpoint.Controllers.Common;
 using BudgetMaster.Entities.DTOs.Transaction;
 using BudgetMaster.Entities.Models;
 using BudgetMaster.Logic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace BudgetMaster.Endpoint.Controllers
 {
     [Route("transaction")]
+    [Authorize]
     public class TransactionController : ApiControllerBase
     {
         private readonly TransactionLogic _logic;
