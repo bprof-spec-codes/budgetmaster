@@ -3,6 +3,7 @@ using BudgetMaster.Entities.DTOs.User;
 using BudgetMaster.Logic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BudgetMaster.Endpoint.Controllers
 {
@@ -62,10 +63,21 @@ namespace BudgetMaster.Endpoint.Controllers
 
         [HttpPost("logout")]
         [Authorize]
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
         {
-            //_logic.method();
-            return Ok();
+            // With JWT, the token is stateless and stored on the client
+            // The client should delete the token from local storage/cookies
+            // Optionally, you can add token blacklisting or update user's security stamp
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                // Log the logout action if needed
+                // You could also update a "LastLogout" field in the database
+            }
+
+            return Ok(new { message = "Logged out successfully. Please remove the token from client storage." });
         }
 
         [HttpGet("profile")]
