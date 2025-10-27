@@ -119,6 +119,7 @@ internal class Program
 
         // Register Logic services
         builder.Services.AddScoped<AuthenticationLogic>();
+        builder.Services.AddScoped<TransactionLogic>();
 
         builder.Services.AddCors(options =>
         {
