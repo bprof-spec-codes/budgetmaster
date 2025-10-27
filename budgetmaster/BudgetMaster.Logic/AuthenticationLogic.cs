@@ -33,6 +33,39 @@ namespace BudgetMaster.Logic
             _context = context;
         }
 
+        private string GenerateJwtToken(AppUser user)
+        {
+            var jwtSettings = _configuration.GetSection("JwtSettings");
+            var secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey is not configured");
+            var issuer = jwtSettings["Issuer"] ?? "BudgetMasterAPI";
+            var audience = jwtSettings["Audience"] ?? "BudgetMasterClient";
+            var expirationMinutes = int.Parse(jwtSettings["ExpirationMinutes"] ?? "60");
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
+                new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
+                new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
+                new Claim("UserType", user.UserType.ToString()),
+                new Claim("AspNet.Identity.SecurityStamp", user.SecurityStamp ?? string.Empty),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            var token = new JwtSecurityToken(
+                issuer: issuer,
+                audience: audience,
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(expirationMinutes),
+                signingCredentials: credentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
         public async Task<(bool Success, string Message, string? Token)> RegisterAsync(RegisterDto dto)
         {
             try
@@ -77,37 +110,44 @@ namespace BudgetMaster.Logic
             }
         }
 
-        private string GenerateJwtToken(AppUser user)
+        
+        public async Task<(bool Success, string Message, string? Token)> LoginAsync(LoginDto dto)
         {
-            var jwtSettings = _configuration.GetSection("JwtSettings");
-            var secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey is not configured");
-            var issuer = jwtSettings["Issuer"] ?? "BudgetMasterAPI";
-            var audience = jwtSettings["Audience"] ?? "BudgetMasterClient";
-            var expirationMinutes = int.Parse(jwtSettings["ExpirationMinutes"] ?? "60");
-
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            var claims = new[]
+            try
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
-                new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
-                new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
-                new Claim("UserType", user.UserType.ToString()),
-                new Claim("AspNet.Identity.SecurityStamp", user.SecurityStamp ?? string.Empty),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
+                // Find user by email
+                var user = await _userManager.FindByEmailAsync(dto.Email);
+                if (user == null)
+                {
+                    return (false, "Invalid email or password", null);
+                }
 
-            var token = new JwtSecurityToken(
-                issuer: issuer,
-                audience: audience,
-                claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(expirationMinutes),
-                signingCredentials: credentials
-            );
+                // Check if user is active
+                if (!user.IsActive)
+                {
+                    return (false, "User account is inactive", null);
+                }
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+                // Verify password
+                var result = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, false);
+                if (!result.Succeeded)
+                {
+                    return (false, "Invalid email or password", null);
+                }
+
+                // Update last login
+                user.LastLogin = DateTime.UtcNow;
+                await _userManager.UpdateAsync(user);
+
+                // Generate JWT token
+                var token = GenerateJwtToken(user);
+
+                return (true, "Login successful", token);
+            }
+            catch (Exception ex)
+            {
+                return (false, $"An error occurred: {ex.Message}", null);
+            }
         }
     }
 }
