@@ -7,13 +7,24 @@ namespace BudgetMaster.Entities.Models
     public class Transaction : EntityBase
     {
 
+        public Transaction()
+        {
+            ExpenseAllocations = new HashSet<ExpenseAllocation>();
+            Currency = "HUF";
+            TransactionDate = DateTime.UtcNow;
+            CreatedAt = DateTime.UtcNow;
+            UpdatedAt = DateTime.UtcNow;
+            Description = string.Empty;
+            Notes = string.Empty;
+            ReceiptUrl = string.Empty;
+        }
+
         [Required]
-        public string UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
 
         public int OrganizationId { get; set; }
 
-        [Required]
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
 
         [Required]
         public TransactionType TransactionType { get; set; }
@@ -41,11 +52,11 @@ namespace BudgetMaster.Entities.Models
 
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-        public virtual AppUser User { get; set; }
+        public virtual AppUser? User { get; set; }
 
-        public virtual Organization Organization { get; set; }
+        public virtual Organization? Organization { get; set; }
 
-        public virtual Category Category { get; set; }
+        public virtual Category? Category { get; set; }
 
         public virtual ICollection<ExpenseAllocation> ExpenseAllocations { get; set; }
     }
