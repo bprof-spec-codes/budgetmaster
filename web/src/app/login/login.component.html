@@ -1,0 +1,53 @@
+<div class="container mt-2">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow">
+        <div class="card-body">
+          <h4 class="text-center mb-4">Bejelentkezés</h4>
+          <form>
+            <div class="mb-3">
+              <label class="form-label" for="username">Felhasználónév</label>
+              <input
+                class="form-control"
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Felhasználónév"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="password">Jelszó</label>
+              <input
+                class="form-control"
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Jelszó"
+                required
+              />
+            </div>
+            <div class="form-check mb-3">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                name="remember"
+                id="rememberCheck"
+              />
+              <label class="form-check-label" for="rememberCheck">
+                Emlékezz rám
+              </label>
+            </div>
+            <button class="btn btn-primary w-100 mb-3" type="submit">
+              Bejelentkezés
+            </button>
+            <p class="text-center">
+              Nincs még fiókja?
+              <a routerLink="/register">Regisztráció</a>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

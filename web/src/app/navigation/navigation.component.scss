@@ -1,0 +1,37 @@
+// Source: https://getbootstrap.com/docs/4.0/examples/navbar-fixed/#
+
+// Variables
+$navbar-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+$nav-link-transition: color 0.3s ease;
+$nav-link-hover-color: #ffffff;
+$icon-margin-right: 0.25rem;
+$main-padding-top: 60px;
+
+.navbar {
+  box-shadow: $navbar-shadow;
+  
+  .nav-link {
+    transition: $nav-link-transition;
+    
+    &:hover {
+      color: $nav-link-hover-color !important;
+    }
+    
+    i {
+      margin-right: $icon-margin-right;
+    }
+  }
+  
+  .navbar-toggler {
+    border: none;
+    
+    &:focus {
+      box-shadow: none;
+    }
+  }
+}
+
+// Main content padding for fixed navbar
+main {
+  padding-top: $main-padding-top;
+}
