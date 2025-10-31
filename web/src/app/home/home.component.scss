@@ -1,0 +1,36 @@
+//transform: https://developer.mozilla.org/en-US/docs/Web/CSS/transform
+
+$hover-bg-color: #d4edda;
+$card-max-width: 25rem;
+
+.card-clickable {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  max-width: $card-max-width;
+  //text-align: center;
+  margin: auto; //MEGNÉZNI KÉSŐBB
+
+  .card-header {
+	text-align: center;
+    font-weight: bold;
+  }
+
+  .card-body {
+	font-weight: 500;
+	text-align: center;
+    //padding: 1rem;
+	;
+  }
+
+  .card-footer {
+	font-weight: 500;
+	text-align: center;
+	font-style: italic;
+  }
+}
+
+.card-clickable:hover {
+  transform: scale(1.05);
+  background-color: $hover-bg-color;
+}
+
