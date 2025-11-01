@@ -9,6 +9,8 @@ import { LogoutComponent } from './logout/logout.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { RegisterComponent } from './register/register.component';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,8 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
     RegisterComponent
   ],
   imports: [
+    FormsModule,
+    CommonModule,
     BrowserModule,
     AppRoutingModule
   ],
