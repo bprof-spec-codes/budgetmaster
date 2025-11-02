@@ -11,6 +11,7 @@ import { RegisterComponent } from './register/register.component';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { FormsModule } from '@angular/forms';
     LoginComponent,
     LogoutComponent,
     NavigationComponent,
-    RegisterComponent
+    RegisterComponent,
+    UserDashboardComponent
   ],
   imports: [
     FormsModule,

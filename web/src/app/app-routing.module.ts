@@ -6,6 +6,7 @@ import { LogoutComponent } from './logout/logout.component';
 import { RegisterComponent } from './register/register.component';
 import { AuthService } from './auth.service';
 import { authGuard } from './auth.guard';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 
 const routes: Routes = [
 	{path: '', component: HomeComponent},
@@ -13,6 +14,7 @@ const routes: Routes = [
 	{path: 'login', component: LoginComponent,},
     {path: 'logout', component: LogoutComponent,},
 	{path: 'register', component: RegisterComponent},
+	{path: 'userdashboard', component: UserDashboardComponent, canActivate: [authGuard]},
 	
 	{path: '**', redirectTo: '', pathMatch: 'full'}
 ];
