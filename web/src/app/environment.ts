@@ -1,4 +1,8 @@
 export const environment = {
   production: false, //majd át állítani true-ra élesben
-  apiUrl: 'https://localhost:5044/api'
+   apis: {
+	login: "https://localhost:7278/auth/login",
+   
+  },
+  tokenKey: "budgetmaster-token"
 };

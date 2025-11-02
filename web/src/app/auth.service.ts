@@ -1,0 +1,80 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { LoginModel } from './models/loginmodel';
+import { Observable, tap } from 'rxjs';
+import { environment } from './environment';
+import { JwtPayload } from './models/jwt-payload';
+
+@Injectable({
+	providedIn: 'root'
+})
+export class AuthService {
+
+	constructor(private http: HttpClient) { }
+
+	login(loginModel: LoginModel): Observable<{ token: string; message: string }> {
+		return this.http.post<{ token: string; message: string }>(
+			environment.apis.login,
+			loginModel
+		).pipe(
+			tap(res => {
+				if (res?.token) {
+					//  console.log("Before token:" + localStorage.getItem(environment.tokenKey))
+					localStorage.setItem(environment.tokenKey, res.token);
+					// console.log("After token:" + localStorage.getItem(environment.tokenKey))
+				}
+			})
+		)
+	}
+
+	getToken(): string | null {
+		return localStorage.getItem(environment.tokenKey)
+	}
+
+	logout(): void {
+		localStorage.removeItem(environment.tokenKey)
+	}
+
+
+	// Van-e érvényes token (exp > now)?
+	isLoggedIn(): boolean {
+		// console.log("isLoggedIn called")
+		const token = this.getToken()
+		if (!token) return false
+		const payload = this.getPayload(token)
+		if (!payload?.expiration) return true // ha nincs exp, akkor a puszta jelenlétet vesszük
+		const nowSec = Math.floor(Date.now() / 1000)
+		return payload.expiration > nowSec
+	}
+
+	// Jelenlegi felhasználói szerepek
+	getRoles(): string[] {
+		const token = this.getToken()
+		if (!token) return []
+		const payload = this.getPayload(token)
+		if (!payload) return []
+		const raw = payload.roles ?? []
+		return Array.isArray(raw) ? raw : [raw]
+	}
+
+	private getPayload(token: string): JwtPayload | null {
+		try {
+			const base64url = token.split('.')[1] ?? ''
+			const json = this.base64UrlDecode(base64url)
+			return JSON.parse(json) as JwtPayload
+		} catch {
+			return null
+		}
+	}
+
+	private base64UrlDecode(input: string): string {
+		const base64 = input.replace(/-/g, '+').replace(/_/g, '/')
+		const pad = base64.length % 4 === 0 ? '' : '='.repeat(4 - (base64.length % 4))
+		const s = atob(base64 + pad)
+		return decodeURIComponent(
+			s.split('').map(c => '%' + c.charCodeAt(0).toString(16).padStart(2, '0')).join('')
+		)
+	}
+
+}
+
