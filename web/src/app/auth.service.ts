@@ -19,9 +19,9 @@ export class AuthService {
 		).pipe(
 			tap(res => {
 				if (res?.token) {
-					// console.log("előtte token:" + localStorage.getItem(environment.tokenKey))
+					//  console.log("Before token:" + localStorage.getItem(environment.tokenKey))
 					localStorage.setItem(environment.tokenKey, res.token);
-					// console.log("utána token:" + localStorage.getItem(environment.tokenKey))
+					// console.log("After token:" + localStorage.getItem(environment.tokenKey))
 				}
 			})
 		)
@@ -38,7 +38,7 @@ export class AuthService {
 
 	// Van-e érvényes token (exp > now)?
 	isLoggedIn(): boolean {
-		console.log("isLoggedIn called")
+		// console.log("isLoggedIn called")
 		const token = this.getToken()
 		if (!token) return false
 		const payload = this.getPayload(token)

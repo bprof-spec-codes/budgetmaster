@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { LoginModel } from '../models/loginmodel';
 import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,7 @@ export class LoginComponent {
 	loginModel: LoginModel = new LoginModel();
 	 errorMessage: string = '';
 
-	 constructor(public authService: AuthService){}
+	 constructor(public authService: AuthService, private router: Router){}
 
 	inputCheck(): boolean {
     	return !(
@@ -29,12 +30,12 @@ export class LoginComponent {
     
     this.authService.login(this.loginModel).subscribe({
       next: (response) => {
-        // Sikeres bejelentkezés
+        // Login successful
         console.log('Login successful', response);
-       // this.router.navigate(['/']);
+       this.router.navigate(['/home']); // Navigate to home 
+	
       },
       error: (error) => {
-        // Hiba kezelése
         console.error('Login failed:', error);
         this.errorMessage = 'Hibás email vagy jelszó!';
       }
