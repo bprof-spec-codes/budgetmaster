@@ -97,16 +97,6 @@ namespace BudgetMaster.Logic
                 {
                     query = query.Where(t => t.TransactionType == filter.TransactionType.Value);
                 }
-
-                if (filter.ExpenseType.HasValue)
-                {
-                    query = query.Where(t => t.ExpenseType == filter.ExpenseType.Value);
-                }
-
-                if (filter.Limit.HasValue && filter.Limit.Value > 0)
-                {
-                    query = query.Take(filter.Limit.Value);
-                }
             }
 
             return await query
