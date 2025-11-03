@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BudgetMaster.Data
-{ 
-    public class BudgetMasterDBContext :  IdentityDbContext<AppUser>
+{
+    public class BudgetMasterDBContext : IdentityDbContext<AppUser>
     {
         #region dbsets
         public DbSet<AppUser> AppUsers { get; set; }
@@ -46,7 +46,7 @@ namespace BudgetMaster.Data
                 .HasIndex(t => t.TransactionDate);
 
             modelBuilder.Entity<Transaction>()
-                .HasIndex(t => t.CategoryId);
+                .HasIndex(t => t.CategoryType);
 
             modelBuilder.Entity<Transaction>()
                 .HasIndex(t => t.TransactionType);
@@ -114,12 +114,6 @@ namespace BudgetMaster.Data
                 .HasForeignKey(t => t.OrganizationId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Transaction>()
-                .HasOne(t => t.Category)
-                .WithMany(c => c.Transactions)
-                .HasForeignKey(t => t.CategoryId)
-                .OnDelete(DeleteBehavior.Restrict);
-
             modelBuilder.Entity<Budget>()
                 .HasOne(b => b.User)
                 .WithMany(u => u.Budgets)
@@ -178,6 +172,10 @@ namespace BudgetMaster.Data
 
             modelBuilder.Entity<Category>()
                 .Property(c => c.CategoryType)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<Transaction>()
+                .Property(t => t.CategoryType)
                 .HasConversion<string>();
 
             modelBuilder.Entity<Transaction>()

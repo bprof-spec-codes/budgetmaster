@@ -24,7 +24,7 @@ namespace BudgetMaster.Entities.Models
 
         public int OrganizationId { get; set; }
 
-        public int? CategoryId { get; set; }
+        public CategoryType? CategoryType { get; set; }
 
         [Required]
         public TransactionType TransactionType { get; set; }
@@ -55,8 +55,6 @@ namespace BudgetMaster.Entities.Models
         public virtual AppUser? User { get; set; }
 
         public virtual Organization? Organization { get; set; }
-
-        public virtual Category? Category { get; set; }
 
         public virtual ICollection<ExpenseAllocation> ExpenseAllocations { get; set; }
     }

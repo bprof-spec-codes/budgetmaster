@@ -10,7 +10,7 @@ namespace BudgetMaster.Entities.DTOs.Transaction
     public class CreateTransactionDto
     {
         public TransactionType TransactionType { get; set; }
-        public int? CategoryId { get; set; }
+        public CategoryType? CategoryType { get; set; }
         public decimal Amount { get; set; }
         public string? Description { get; set; }
     }

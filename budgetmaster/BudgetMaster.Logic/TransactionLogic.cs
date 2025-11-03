@@ -21,7 +21,7 @@ namespace BudgetMaster.Logic
             {
                 UserId = userId,
                 OrganizationId = 0,
-                CategoryId = null,
+                CategoryType = dto.CategoryType,
                 TransactionType = dto.TransactionType,
                 Amount = dto.Amount,
                 Currency = "HUF",
@@ -37,7 +37,6 @@ namespace BudgetMaster.Logic
             return await _context.Transactions
                 .Include(t => t.User)
                 .Include(t => t.Organization)
-                .Include(t => t.Category)
                 .FirstOrDefaultAsync(t => t.Id == transaction.Id);
         }
 
@@ -46,7 +45,6 @@ namespace BudgetMaster.Logic
             return await _context.Transactions
                 .Include(t => t.User)
                 .Include(t => t.Organization)
-                .Include(t => t.Category)
                 .Include(t => t.ExpenseAllocations)
                 .FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
         }
@@ -56,7 +54,6 @@ namespace BudgetMaster.Logic
             var query = _context.Transactions
                 .Include(t => t.User)
                 .Include(t => t.Organization)
-                .Include(t => t.Category)
                 .Where(t => t.UserId == userId);
 
             if (filter != null)
@@ -71,9 +68,9 @@ namespace BudgetMaster.Logic
                     query = query.Where(t => t.TransactionDate <= filter.EndDate.Value);
                 }
 
-                if (filter.CategoryId.HasValue)
+                if (filter.CategoryType.HasValue)
                 {
-                    query = query.Where(t => t.CategoryId == filter.CategoryId.Value);
+                    query = query.Where(t => t.CategoryType == filter.CategoryType.Value);
                 }
 
                 if (filter.TransactionType.HasValue)
@@ -105,7 +102,7 @@ namespace BudgetMaster.Logic
                 return null;
             }
 
-            transaction.CategoryId = dto.CategoryId;
+            transaction.CategoryType = dto.CategoryType;
             transaction.Amount = dto.Amount;
             transaction.TransactionDate = dto.TransactionDate;
 

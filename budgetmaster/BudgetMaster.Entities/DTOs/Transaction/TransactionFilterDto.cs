@@ -11,7 +11,7 @@ namespace BudgetMaster.Entities.DTOs.Transaction
     {
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public int? CategoryId { get; set; }
+        public CategoryType? CategoryType { get; set; }
         public TransactionType? TransactionType { get; set; }
         public ExpenseType? ExpenseType { get; set; }
         public int? Limit { get; set; }
