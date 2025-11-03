@@ -7,7 +7,7 @@ export const authGuard: CanActivateFn = (route, state) => {
 	const auth = inject(AuthService)
 	const router = inject(Router)
 
-	// 1) be van-e jelentkezve (exp alapján is)
+	// Auth check
 	if (!auth.isLoggedIn()) {
 		console.log("AuthGuard activated")
 		router.navigate(['/login'], { queryParams: { returnUrl: state.url } })

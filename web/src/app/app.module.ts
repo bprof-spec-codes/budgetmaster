@@ -11,6 +11,8 @@ import { RegisterComponent } from './register/register.component';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { jwtInterceptor } from './jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,8 @@ import { FormsModule } from '@angular/forms';
     LoginComponent,
     LogoutComponent,
     NavigationComponent,
-    RegisterComponent
+    RegisterComponent,
+    UserDashboardComponent
   ],
   imports: [
     FormsModule,
@@ -27,7 +30,7 @@ import { FormsModule } from '@angular/forms';
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [provideHttpClient(withInterceptors([]))],
+  providers: [provideHttpClient(withInterceptors([jwtInterceptor]))],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

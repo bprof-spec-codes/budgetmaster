@@ -1,23 +1,21 @@
-export interface UserModel {
+export interface User {
   id: string;
-  userName?: string;
   email: string;
   firstName: string;
   lastName: string;
-  phone?: string;
-  userType: UserType;
+  phoneNumber: string | null;
+  userType: string;
   currency: string;
-  isActive: boolean;
-  organizationId?: number;
-  createdAt: Date;
-  updatedAt: Date;
-  lastLogin?: Date;
-  fullName: string;
+  organizationId: number | null;
+  createdAt: string;
+  lastLogin: string;
+  picture: string;
 }
 
-export enum UserType {
-  Admin = 0,
-  Manager = 1,
-  Employee = 2,
-  User = 3
-}
+
+// export enum UserType {
+//   Admin = 0,
+//   Manager = 1,
+//   Employee = 2,
+//   User = 3
+// }

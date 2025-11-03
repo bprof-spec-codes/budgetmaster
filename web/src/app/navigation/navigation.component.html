@@ -1,18 +1,43 @@
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
   <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarCollapse"
+      aria-controls="navbarCollapse"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
-    
+
+    <li class="nav-item" *ngIf="authService.isLoggedIn()">
+      <a class="nav-link d-flex align-items-center" routerLink="/userdashboard">
+        <img
+          [src]="dataService.getUsetProfilPicture('')"
+          alt="Profil"
+          class="rounded-circle me-2 profile-picture"
+        />
+      </a>
+    </li>
+
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav me-auto">
+        <li class="nav-item" *ngIf="authService.isLoggedIn()">
+          <a class="nav-link" routerLink="/userdashboard">
+            <i class="bi bi-person-circle me-1"></i>
+            Profil
+          </a>
+        </li>
+
         <li class="nav-item">
           <a class="nav-link" routerLink="/">
             <i class="bi bi-house-door me-1"></i>
             Home
           </a>
         </li>
-        <li class="nav-item" *ngIf="!authService.isLoggedIn()" >
+        <li class="nav-item" *ngIf="!authService.isLoggedIn()">
           <a class="nav-link" routerLink="/login">
             <i class="bi bi-box-arrow-in-right me-1"></i>
             Bejelentkezés
@@ -30,26 +55,20 @@
             Kijelentkezés
           </a>
         </li>
-        <li class="nav-item"  *ngIf="authService.isLoggedIn()">
-          <a class="nav-link" routerLink="/transactions">
-            Tranzakciók
-          </a>
+        <li class="nav-item" *ngIf="authService.isLoggedIn()">
+          <a class="nav-link" routerLink="/transactions"> Tranzakciók </a>
         </li>
-        <li class="nav-item"  *ngIf="authService.isLoggedIn()">
-          <a class="nav-link" routerLink="/budgets">
-            Költségkeretek
-          </a>
+        <li class="nav-item" *ngIf="authService.isLoggedIn()">
+          <a class="nav-link" routerLink="/budgets"> Költségkeretek </a>
         </li>
-        <li class="nav-item"  *ngIf="authService.isLoggedIn()">
+        <li class="nav-item" *ngIf="authService.isLoggedIn()">
           <a class="nav-link" routerLink="/statistics">
             <i class="bi bi-bar-chart me-1"></i>
             Statisztikák
           </a>
         </li>
-        <li class="nav-item"  *ngIf="authService.isLoggedIn()">
-          <a class="nav-link" routerLink="/export">
-            Exportálás
-          </a>
+        <li class="nav-item" *ngIf="authService.isLoggedIn()">
+          <a class="nav-link" routerLink="/export"> Exportálás </a>
         </li>
       </ul>
     </div>
