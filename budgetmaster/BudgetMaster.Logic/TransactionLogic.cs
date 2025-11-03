@@ -25,7 +25,7 @@ namespace BudgetMaster.Logic
                 TransactionType = dto.TransactionType,
                 Amount = dto.Amount,
                 Currency = "HUF",
-                TransactionDate = DateTime.UtcNow,
+                TransactionDate = dto.TransactionDate.ToDateTime(TimeOnly.MinValue),
                 Description = dto.Description ?? string.Empty,
                 Notes = string.Empty,
                 ExpenseType = null
@@ -104,7 +104,7 @@ namespace BudgetMaster.Logic
 
             transaction.CategoryType = dto.CategoryType;
             transaction.Amount = dto.Amount;
-            transaction.TransactionDate = dto.TransactionDate;
+            transaction.TransactionDate = dto.TransactionDate.ToDateTime(TimeOnly.MinValue);
 
             if (dto.Description != null)
                 transaction.Description = dto.Description;
