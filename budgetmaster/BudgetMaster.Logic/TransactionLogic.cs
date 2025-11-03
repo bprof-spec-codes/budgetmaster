@@ -105,6 +105,7 @@ namespace BudgetMaster.Logic
                 return null;
             }
 
+            transaction.TransactionType = dto.TransactionType;
             transaction.CategoryType = dto.CategoryType;
             transaction.Amount = dto.Amount;
             transaction.TransactionDate = dto.TransactionDate.ToDateTime(TimeOnly.MinValue);

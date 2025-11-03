@@ -9,6 +9,7 @@ namespace BudgetMaster.Entities.DTOs.Transaction
 {
     public class UpdateTransactionDto
     {
+        public TransactionType TransactionType { get; set; }
         public CategoryType? CategoryType { get; set; }
         public decimal Amount { get; set; }
         public DateOnly TransactionDate { get; set; }
