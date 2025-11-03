@@ -2,130 +2,141 @@
   <div class="row mb-4">
     <div class="col-md-12">
       <h2 class="text-center mb-4">Felhasználói profil</h2>
+
+      <form class="row g-3" (ngSubmit)="onSubmit()">
+        <div class="col-md-3 text-center">
+          <img
+            [src]="currentUser.picture"
+            alt="Profilkép"
+            class="rounded-circle shadow mb-3 profile-pic"
+          />
+        </div>
+        <div class="col-md-9">
+          <label for="profilpicture" class="form-label"
+            >Válasszon profilképet</label
+          >
+          <div>
+            <select
+              class="form-select"
+              id="profilpicture"
+              [(ngModel)]="currentUser.picture"
+              name="picture"
+              required
+            >
+              <option
+                *ngFor="let picture of profilpictures$ | async"
+                [value]=""
+              >
+                {{ dataService.getUsetProfilPicture(picture) }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <label for="lastName" class="form-label">Vezetéknév</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Kérjük adja meg a vezetéknevet."
+            id="lastName"
+            [(ngModel)]="currentUser.lastName"
+            name="lastName"
+            required
+          />
+        </div>
+
+        <div class="col-md-6">
+          <label for="firstName" class="form-label">Keresztnév</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Kérjük adja meg a keresztnevet."
+            id="firstName"
+            [(ngModel)]="currentUser.firstName"
+            name="firstName"
+            required
+          />
+        </div>
+
+        <div class="col-md-6">
+          <label for="email" class="form-label">Email cím</label>
+          <div class="input-group">
+            <span class="input-group-text">&#64;</span>
+            <input
+              type="email"
+              class="form-control"
+              placeholder="Kérjük adja meg az email címét."
+              id="email"
+              [(ngModel)]="currentUser.email"
+              name="email"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <label for="phoneNumber" class="form-label">Telefonszám</label>
+          <input
+            type="tel"
+            class="form-control"
+            placeholder="Kérjük adja meg a telefonszámát."
+            id="phoneNumber"
+            [(ngModel)]="currentUser.phoneNumber"
+            name="phoneNumber"
+          />
+        </div>
+
+        <div class="col-md-4">
+          <label for="userType" class="form-label">Felhasználó típus</label>
+          <select
+            class="form-select"
+            id="userType"
+            [(ngModel)]="currentUser.userType"
+            name="userType"
+            required
+          >
+            <option value="Personal">Személyes</option>
+            <option value="Business">Üzleti</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label for="currency" class="form-label">Pénznem</label>
+          <select
+            class="form-select"
+            id="currency"
+            [(ngModel)]="currentUser.currency"
+            name="currency"
+            required
+          >
+            <option *ngFor="let currency of validCurrencies" [value]="currency">
+              {{ currency }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label for="createdAt" class="form-label">Regisztráció dátuma</label>
+          <input
+            type="text"
+            class="form-control"
+            id="createdAt"
+            [value]="currentUser.createdAt | date : 'yyyy-MM-dd HH:mm'"
+            disabled
+          />
+        </div>
+
+        <div class="col-12">
+          <button
+            class="btn btn-primary"
+            type="submit"
+            [disabled]="!isFormValid()"
+          >
+            Mentés
+          </button>
+        </div>
+      </form>
     </div>
-    
-    
   </div>
-
-  <form class="row g-3" (ngSubmit)="onSubmit()">
-
-	<div class="col-md-3 text-center">
-      <img [src]="userModel.picture"
-           alt="Profilkép" 
-           class="rounded-circle shadow mb-3 profile-pic">
-    </div>
-    
-    <div class="col-md-9">
-      <label for="profilpicture" class="form-label">Válasszon profilképet</label>
-      <div>
-       <select 
-        class="form-select"
-        id="profilpicture" 
-        [(ngModel)]="userModel.picture"
-        name="picture"
-        required>
-        <option *ngFor="let picture of profilpictures$ | async" [value]="">
-          {{dataService.getUsetProfilPicture(picture)}}
-        </option>
-      </select>
-      </div>
-    </div>
-
-
-    <div class="col-md-6">
-      <label for="lastName" class="form-label">Vezetéknév</label>
-      <input 
-        type="text" 
-        class="form-control"
-        placeholder="Kérjük adja meg a vezetéknevet."
-        id="lastName" 
-        [(ngModel)]="userModel.lastName"
-        name="lastName"
-        required>
-    </div>
-
-    <div class="col-md-6">
-      <label for="firstName" class="form-label">Keresztnév</label>
-      <input 
-        type="text" 
-        class="form-control" 
-        placeholder="Kérjük adja meg a keresztnevet."
-        id="firstName" 
-        [(ngModel)]="userModel.firstName"
-        name="firstName"
-        required>
-    </div>
-
-    <div class="col-md-6">
-      <label for="email" class="form-label">Email cím</label>
-      <div class="input-group">
-        <span class="input-group-text">&#64;</span>
-        <input 
-          type="email" 
-          class="form-control"
-          placeholder="Kérjük adja meg az email címét."
-          id="email" 
-          [(ngModel)]="userModel.email"
-          name="email"
-          required>
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <label for="phoneNumber" class="form-label">Telefonszám</label>
-      <input 
-        type="tel" 
-        class="form-control"
-        placeholder="Kérjük adja meg a telefonszámát."
-        id="phoneNumber" 
-        [(ngModel)]="userModel.phoneNumber"
-        name="phoneNumber">
-    </div>
-
-    <div class="col-md-4">
-      <label for="userType" class="form-label">Felhasználó típus</label>
-      <select 
-        class="form-select"
-        id="userType" 
-        [(ngModel)]="userModel.userType"
-        name="userType"
-        required>
-        <option value="Personal">Személyes</option>
-        <option value="Business">Üzleti</option>
-      </select>
-    </div>
-
-    <div class="col-md-4">
-      <label for="currency" class="form-label">Pénznem</label>
-      <select 
-        class="form-select"
-        id="currency" 
-        [(ngModel)]="userModel.currency"
-        name="currency"
-        required>
-        <option *ngFor="let currency of validCurrencies" [value]="currency">
-          {{currency}}
-        </option>
-      </select>
-    </div>
-
-    <div class="col-md-4">
-      <label for="createdAt" class="form-label">Regisztráció dátuma</label>
-      <input 
-        type="text" 
-        class="form-control" 
-        id="createdAt" 
-        [value]="userModel.createdAt | date:'yyyy-MM-dd HH:mm'"
-        disabled>
-    </div>
-
-    <div class="col-12">
-      <button 
-        class="btn btn-primary" 
-        type="submit"
-        [disabled]="!isFormValid()">
-        Mentés
-      </button>
-    </div>
-  </form>
 </div>
