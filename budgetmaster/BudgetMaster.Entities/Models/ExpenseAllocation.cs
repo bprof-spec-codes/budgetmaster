@@ -17,6 +17,7 @@ namespace BudgetMaster.Entities.Models
         public string Notes { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
         public virtual Transaction Transaction { get; set; }
 
         public virtual Employee Employee { get; set; }

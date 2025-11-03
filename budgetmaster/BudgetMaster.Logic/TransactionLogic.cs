@@ -47,16 +47,33 @@ namespace BudgetMaster.Logic
             return transaction;
         }
 
-        public async Task<Transaction?> GetTransactionByIdAsync(int id, string userId)
+        public async Task<TransactionResponseDto?> GetTransactionByIdAsync(int id, string userId)
         {
             return await _context.Transactions
-                .Include(t => t.ExpenseAllocations)
-                .FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
+                .AsNoTracking()
+                .Where(t => t.Id == id && t.UserId == userId)
+                .Select(t => new TransactionResponseDto
+                {
+                    Id = t.Id,
+                    Amount = t.Amount,
+                    TransactionDate = DateOnly.FromDateTime(t.TransactionDate),
+                    Description = t.Description,
+                    TransactionType = t.TransactionType,
+                    CategoryType = t.CategoryType,
+                    ExpenseType = t.ExpenseType,
+                    ReceiptUrl = t.ReceiptUrl,
+                    UserName = t.User != null ? t.User.UserName : null,
+                    OrganizationName = t.Organization != null ? t.Organization.Name : null,
+                    CreatedAt = t.CreatedAt,
+                    UpdatedAt = t.UpdatedAt
+                })
+                .FirstOrDefaultAsync();
         }
 
-        public async Task<List<Transaction>> GetUserTransactionsAsync(string userId, TransactionFilterDto? filter = null)
+        public async Task<List<TransactionResponseDto>> GetUserTransactionsAsync(string userId, TransactionFilterDto? filter = null)
         {
             var query = _context.Transactions
+                .AsNoTracking()
                 .Where(t => t.UserId == userId);
 
             if (filter != null)
@@ -92,10 +109,27 @@ namespace BudgetMaster.Logic
                 }
             }
 
-            return await query.OrderByDescending(t => t.TransactionDate).ToListAsync();
+            return await query
+                .OrderByDescending(t => t.TransactionDate)
+                .Select(t => new TransactionResponseDto
+                {
+                    Id = t.Id,
+                    Amount = t.Amount,
+                    TransactionDate = DateOnly.FromDateTime(t.TransactionDate),
+                    Description = t.Description,
+                    TransactionType = t.TransactionType,
+                    CategoryType = t.CategoryType,
+                    ExpenseType = t.ExpenseType,
+                    ReceiptUrl = t.ReceiptUrl,
+                    UserName = t.User != null ? t.User.UserName : null,
+                    OrganizationName = t.Organization != null ? t.Organization.Name : null,
+                    CreatedAt = t.CreatedAt,
+                    UpdatedAt = t.UpdatedAt
+                })
+                .ToListAsync();
         }
 
-        public async Task<Transaction?> UpdateTransactionAsync(int id, UpdateTransactionDto dto, string userId)
+        public async Task<TransactionResponseDto?> UpdateTransactionAsync(int id, UpdateTransactionDto dto, string userId)
         {
             var transaction = await _context.Transactions
                 .FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
@@ -116,6 +150,9 @@ namespace BudgetMaster.Logic
             transaction.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
+
+            // Detach and return DTO
+            _context.Entry(transaction).State = EntityState.Detached;
 
             return await GetTransactionByIdAsync(id, userId);
         }
