@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../auth.service';
+import { DataService } from '../data.service';
 
 @Component({
   selector: 'app-navigation',
@@ -9,6 +10,6 @@ import { AuthService } from '../auth.service';
 })
 export class NavigationComponent {
 
-	constructor(public authService : AuthService) {}
+	constructor(public authService : AuthService, public dataService: DataService) {}
 
 }

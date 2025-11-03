@@ -1,4 +1,4 @@
-// Source: https://getbootstrap.com/docs/4.0/examples/navbar-fixed/#
+// Source:
 
 // Variables
 $navbar-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -34,4 +34,11 @@ $main-padding-top: 60px;
 // Main content padding for fixed navbar
 main {
   padding-top: $main-padding-top;
+}
+
+.profile-picture {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border: 1px solid white;
 }
