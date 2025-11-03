@@ -12,6 +12,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { jwtInterceptor } from './jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,7 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [provideHttpClient(withInterceptors([]))],
+  providers: [provideHttpClient(withInterceptors([jwtInterceptor]))],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
