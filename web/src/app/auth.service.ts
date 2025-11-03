@@ -18,10 +18,8 @@ export class AuthService {
 			loginModel
 		).pipe(
 			tap(res => {
-				if (res?.token) {
-					//  console.log("Before token:" + localStorage.getItem(environment.tokenKey))
+				if (res?.token) {			
 					localStorage.setItem(environment.tokenKey, res.token);
-					// console.log("After token:" + localStorage.getItem(environment.tokenKey))
 				}
 			})
 		)
