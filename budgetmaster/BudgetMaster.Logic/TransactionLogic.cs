@@ -17,10 +17,17 @@ namespace BudgetMaster.Logic
 
         public async Task<Transaction?> CreateTransactionAsync(CreateTransactionDto dto, string userId)
         {
+            // Get user's organization ID
+            var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+            {
+                return null;
+            }
+
             var transaction = new Transaction
             {
                 UserId = userId,
-                OrganizationId = 0,
+                OrganizationId = user.OrganizationId,
                 CategoryType = dto.CategoryType,
                 TransactionType = dto.TransactionType,
                 Amount = dto.Amount,
@@ -34,17 +41,15 @@ namespace BudgetMaster.Logic
             _context.Transactions.Add(transaction);
             await _context.SaveChangesAsync();
 
-            return await _context.Transactions
-                .Include(t => t.User)
-                .Include(t => t.Organization)
-                .FirstOrDefaultAsync(t => t.Id == transaction.Id);
+            // Detach to prevent lazy loading
+            _context.Entry(transaction).State = EntityState.Detached;
+
+            return transaction;
         }
 
         public async Task<Transaction?> GetTransactionByIdAsync(int id, string userId)
         {
             return await _context.Transactions
-                .Include(t => t.User)
-                .Include(t => t.Organization)
                 .Include(t => t.ExpenseAllocations)
                 .FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
         }
@@ -52,8 +57,6 @@ namespace BudgetMaster.Logic
         public async Task<List<Transaction>> GetUserTransactionsAsync(string userId, TransactionFilterDto? filter = null)
         {
             var query = _context.Transactions
-                .Include(t => t.User)
-                .Include(t => t.Organization)
                 .Where(t => t.UserId == userId);
 
             if (filter != null)

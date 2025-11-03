@@ -22,7 +22,7 @@ namespace BudgetMaster.Entities.Models
         [Required]
         public string UserId { get; set; } = string.Empty;
 
-        public int OrganizationId { get; set; }
+        public int? OrganizationId { get; set; }
 
         public CategoryType? CategoryType { get; set; }
 
